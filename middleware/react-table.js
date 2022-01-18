@@ -24,7 +24,7 @@ import {
 } from "@heroicons/react/outline";
 import CurrentDolar from "../middleware/currentdolar";
 import { matchSorter } from "match-sorter";
-import { Menu, Transition, Switch, Dialog } from "@headlessui/react";
+import { Popover, Transition, Switch, Dialog } from "@headlessui/react";
 
 const IndeterminateCheckbox = React.forwardRef(
   ({ indeterminate, ...rest }, ref) => {
@@ -38,6 +38,18 @@ const IndeterminateCheckbox = React.forwardRef(
     return <input type="checkbox" ref={resolvedRef} {...rest} />;
   }
 );
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+/**
+function Dolar() {
+  const { data, error } = useSwr("/api/currency/BRL", fetcher);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <div>...</div>;
+  return data.data;
+}
+console.log("Valor: " + Dolar);
+ */
 
 // Define a default UI for filtering
 function GlobalFilter({
@@ -48,13 +60,13 @@ function GlobalFilter({
   const count = preGlobalFilteredRows.length;
   const [value, setValue] = React.useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || undefined);
-  }, 250);
+    setGlobalFilter(value);
+  }, 200);
 
   return (
     <input
       className="border-0 rounded-md w-48 p-1 placeholder-gray-600 dark:placeholder-gray-200 text-sm text-gray-600 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 inline text-center dark:border-gray-600"
-      value={value || ""}
+      value={value}
       onChange={(e) => {
         setValue(e.target.value);
         onChange(e.target.value);
@@ -153,6 +165,7 @@ function Table({ columns, data }) {
   );
 
   const [clientEnabled, setClientEnabled] = useState(true);
+  const [Dolar, setDolar] = useState(5.32);
 
   function toggleClient() {
     setClientEnabled(!clientEnabled);
@@ -279,7 +292,10 @@ function Table({ columns, data }) {
               </select>
             </th>
 
-            <th className="h-auto p-2 border-t border-gray-400 dark:border-gray-600 items-center space-x-4">
+            <th
+              className="h-auto p-2 border-t border-gray-400 dark:border-gray-600 items-center space-x-4"
+              colSpan={visibleColumns.length - 2}
+            >
               <div className="flex">
                 <div className="mx-4">
                   <ChevronDoubleLeftIcon
@@ -342,32 +358,29 @@ function Table({ columns, data }) {
                 </div>
               </div>
             </th>
-            <th
-              className="p-2 border-t border-r border-gray-400 dark:border-gray-600"
-              colSpan={visibleColumns.length - 2}
-            >
+            <th className="p-2 border-t border-r border-gray-400 dark:border-gray-600">
               <div className="relative h-6 w-full">
                 <div className="absolute right-0 -top-2">
-                  <Menu as="div" className="relative inline-block text-left">
+                  <Popover as="div" className="relative inline-block text-left">
                     <div>
-                      <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black dark:text-white rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-opacity-75">
+                      <Popover.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black dark:text-white rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-opacity-75">
                         <CogIcon className="w-6 h-6" />
-                      </Menu.Button>
+                      </Popover.Button>
                     </div>
                     <Transition
-                      enter="transition duration-100 ease-out"
-                      enterFrom="transform scale-95 opacity-0"
-                      enterTo="transform scale-100 opacity-100"
-                      leave="transition duration-75 ease-out"
-                      leaveFrom="transform scale-100 opacity-100"
-                      leaveTo="transform scale-95 opacity-0"
+                      enter="transition ease-out duration-200"
+                      enterFrom="opacity-0 translate-y-1"
+                      enterTo="opacity-100 translate-y-0"
+                      leave="transition ease-in duration-150"
+                      leaveFrom="opacity-100 translate-y-0"
+                      leaveTo="opacity-0 translate-y-1"
                     >
-                      <Menu.Items
+                      <Popover.Panel
                         static="true"
                         className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 divide-y divide-gray-100 dark:divide-gray-600 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                       >
                         <div className="px-1 py-1 ">
-                          <Menu.Item as="div">
+                          <div>
                             <label className="cursor-pointer inline-flex">
                               <span className="text-gray-700 dark:text-gray-200 mx-4">
                                 Modo cliente
@@ -395,18 +408,52 @@ function Table({ columns, data }) {
                                 </Switch>
                               </div>
                             </label>
-                          </Menu.Item>
+                          </div>
                         </div>
                         {clientEnabled == false ? (
                           <div className="px-1 py-1 ">
-                            <Menu.Item>
-                              <button> teste </button>
-                            </Menu.Item>
+                            <div>
+                              <label className="cursor-pointer inline-flex">
+                                <span className="text-gray-700 dark:text-gray-200 mx-4">
+                                  Cotação
+                                </span>
+                                <div className="mx-4">
+                                  <input
+                                    type="number"
+                                    className="border-0 placeholder-gray-600 dark:placeholder-gray-200 text-gray-600 dark:text-gray-200 bg-gray-100 dark:bg-gray-600 dark:border-gray-600 block min-w-24 w-24 pl-7 pr-3 text-sm sm:text-sm rounded-md text-right h-6"
+                                    value={Dolar}
+                                    onChange={(e) => {
+                                      if (e.target.value == "") {
+                                        setDolar(5.32);
+                                      } else {
+                                        if (e.target.value.indexOf(".") >= 0) {
+                                          setDolar(
+                                            Number(
+                                              e.target.value.substring(
+                                                0,
+                                                e.target.value.indexOf(".")
+                                              ) +
+                                                e.target.value.substring(
+                                                  e.target.value.indexOf("."),
+                                                  4
+                                                )
+                                            )
+                                          );
+                                        } else {
+                                          setDolar(Number(e.target.value));
+                                        }
+                                      }
+                                      //console.log(Number(Dolar));
+                                    }}
+                                  />
+                                </div>
+                              </label>
+                            </div>
                           </div>
                         ) : null}
-                      </Menu.Items>
+                      </Popover.Panel>
                     </Transition>
-                  </Menu>
+                  </Popover>
                 </div>
               </div>
             </th>
@@ -468,7 +515,9 @@ function Table({ columns, data }) {
                             href={url}
                             rel="noreferrer"
                             target="_blank"
-                            className="hover:text-blue-500 dark:hover:text-blue-300"
+                            className={`${
+                              clientEnabled ? " text-left " : null
+                            } " hover:text-blue-500 dark:hover:text-blue-300 `}
                           >
                             {cell.render("Cell")}
                           </a>
@@ -521,7 +570,6 @@ function App({ on, at = null }) {
     []
   );
 
-  const fetcher = (url) => fetch(url).then((res) => res.json());
   const site = "/api/table/" + on;
   if (at != null) site = "/api/table/" + on + "/" + at;
   const { data, error } = useSwr(site, fetcher);

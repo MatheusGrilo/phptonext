@@ -24,7 +24,7 @@ export default function Home() {
               <div>
                 <div className="mt-1 relative rounded-md">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 text-sm sm:text-sm">
+                    <span className="text-gray-500 dark:text-gray-400 text-sm sm:text-sm">
                       R$
                       <CurrentDolar /> +{" "}
                     </span>
@@ -33,7 +33,7 @@ export default function Home() {
                     type="text"
                     name="price"
                     id="price"
-                    className="focus:ring-2 focus:ring-green-500 focus:border-0 block min-w-28 w-28 pl-7 pr-3 text-sm sm:text-sm border-gray-300 text-gray-800 rounded-md text-right h-8 dark:text-white"
+                    className="border-0 placeholder-gray-600 dark:placeholder-gray-200 text-gray-600 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 block min-w-28 w-28 pl-7 pr-3 text-sm sm:text-sm rounded-md text-right h-8"
                     placeholder="0.10"
                   />
                 </div>
@@ -60,7 +60,7 @@ export default function Home() {
               <div>
                 <div className="mt-1 relative rounded-md">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 text-sm sm:text-sm">
+                    <span className="text-gray-500 dark:text-gray-400 text-sm sm:text-sm">
                       R$
                       <CurrentDolar /> +{" "}
                     </span>
@@ -69,7 +69,7 @@ export default function Home() {
                     type="text"
                     name="price"
                     id="price"
-                    className="focus:ring-2 focus:ring-green-500 focus:border-0 block w-28 pl-7 pr-3 text-sm sm:text-sm border-gray-300 text-gray-800 rounded-md text-right h-8 dark:text-white"
+                    className="border-0 placeholder-gray-600 dark:placeholder-gray-200 text-gray-600 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 dark:border-gray-600 block min-w-28 w-28 pl-7 pr-3 text-sm sm:text-sm rounded-md text-right h-8"
                     placeholder="0.10"
                   />
                 </div>
