@@ -1,6 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/jsx-key */
 import React, { Fragment, useEffect, useRef, useState } from "react";
+import { createGlobalState } from "react-hooks-global-state";
 import useSwr from "swr";
 import {
   useTable,
@@ -26,19 +27,58 @@ import CurrentDolar from "../middleware/currentdolar";
 import { matchSorter } from "match-sorter";
 import { Popover, Transition, Switch, Dialog } from "@headlessui/react";
 
-const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef();
-    const resolvedRef = ref || defaultRef;
+const initialState = { clientEnabled: true, dollar: 0, dataTable: null };
+const { useGlobalState } = createGlobalState(initialState);
 
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate;
-    }, [resolvedRef, indeterminate]);
-
-    return <input type="checkbox" ref={resolvedRef} {...rest} />;
-  }
-);
 const fetcher = (url) => fetch(url).then((res) => res.json());
+
+function Dolar() {
+  const [Dollar, setDollar] = useGlobalState("dollar");
+  const { data, error } = useSwr("/api/currency/brl", fetcher);
+  if (error) return <div>Error</div>;
+  if (!data) return <div>...</div>;
+  if (data == data.data) {
+    setDollar(
+      Number(parseFloat(parseFloat(data.data) + parseFloat(0.3)).toFixed(2))
+    );
+  }
+  console.log("dolar loaded");
+
+  return (
+    <>
+      <input
+        type="number"
+        min="0.01"
+        max="100.00"
+        step="0.01"
+        className="border-0 placeholder-gray-600 dark:placeholder-gray-200 text-gray-600 dark:text-gray-200 bg-gray-100 dark:bg-gray-600 dark:border-gray-600 block min-w-24 w-24 pl-7 pr-3 text-sm sm:text-sm rounded-md text-right h-6"
+        value={Dollar}
+        onChange={(e) => {
+          if (e.target.value == "" || null || 0) {
+            setDollar(
+              Number(
+                parseFloat(parseFloat(data.data) + parseFloat(0.3)).toFixed(2)
+              )
+            );
+          } else {
+            if (e.target.value.indexOf(".") >= 0) {
+              setDollar(
+                Number(
+                  e.target.value.substring(0, e.target.value.indexOf(".")) +
+                    e.target.value.substring(e.target.value.indexOf("."), 4)
+                )
+              );
+            } else {
+              setDollar(Number(e.target.value));
+            }
+          }
+          //console.log("Dolar: " + Dollar);
+          //console.log("data.data: " + data.data);
+        }}
+      />
+    </>
+  );
+}
 
 /**
 function Dolar() {
@@ -61,6 +101,7 @@ function GlobalFilter({
   const [value, setValue] = React.useState(globalFilter);
   const onChange = useAsyncDebounce((value) => {
     setGlobalFilter(value);
+    //console.log(Dolar);
   }, 200);
 
   return (
@@ -106,7 +147,23 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
-function Table({ columns, data }) {
+function Table({ columns, data, onFetchData }) {
+  const [dataTable, setData] = React.useState([]);
+  const skipPageResetRef = React.useRef();
+
+  const updateData = (newData) => {
+    // When data gets updated with this function, set a flag
+    // to disable all of the auto resetting
+    skipPageResetRef.current = true;
+
+    setData(newData);
+  };
+
+  React.useEffect(() => {
+    // After the table has updated, always remove the flag
+    skipPageResetRef.current = false;
+  });
+
   const filterTypes = React.useMemo(
     () => ({
       globalFilter: fuzzyTextFilterFn,
@@ -140,7 +197,7 @@ function Table({ columns, data }) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize, globalFilter },
+    state: { pageIndex, pageSize, globalFilter, sortBy, filters },
     prepareRow,
     state,
     visibleColumns,
@@ -157,6 +214,13 @@ function Table({ columns, data }) {
       initialState: {
         hiddenColumns: ["Valor (U$)", "Custo"],
       },
+      autoResetPage: !skipPageResetRef.current,
+      autoResetExpanded: !skipPageResetRef.current,
+      autoResetGroupBy: !skipPageResetRef.current,
+      autoResetSelectedRows: !skipPageResetRef.current,
+      autoResetSortBy: !skipPageResetRef.current,
+      autoResetFilters: !skipPageResetRef.current,
+      autoResetRowState: !skipPageResetRef.current,
     },
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
@@ -164,8 +228,8 @@ function Table({ columns, data }) {
     usePagination
   );
 
-  const [clientEnabled, setClientEnabled] = useState(true);
-  const [Dolar, setDolar] = useState(5.32);
+  const [clientEnabled, setClientEnabled] = useGlobalState("clientEnabled");
+  const [Dollar, setDollar] = useGlobalState("dollar");
 
   function toggleClient() {
     setClientEnabled(!clientEnabled);
@@ -173,6 +237,7 @@ function Table({ columns, data }) {
       //console.log(true);
       toggleHideColumn("Valor (U$)", false);
       toggleHideColumn("Custo", false);
+
       //toggleHideAllColumns(false);
     } else {
       //console.log(false);
@@ -418,34 +483,7 @@ function Table({ columns, data }) {
                                   Cotação
                                 </span>
                                 <div className="mx-4">
-                                  <input
-                                    type="number"
-                                    className="border-0 placeholder-gray-600 dark:placeholder-gray-200 text-gray-600 dark:text-gray-200 bg-gray-100 dark:bg-gray-600 dark:border-gray-600 block min-w-24 w-24 pl-7 pr-3 text-sm sm:text-sm rounded-md text-right h-6"
-                                    value={Dolar}
-                                    onChange={(e) => {
-                                      if (e.target.value == "") {
-                                        setDolar(5.32);
-                                      } else {
-                                        if (e.target.value.indexOf(".") >= 0) {
-                                          setDolar(
-                                            Number(
-                                              e.target.value.substring(
-                                                0,
-                                                e.target.value.indexOf(".")
-                                              ) +
-                                                e.target.value.substring(
-                                                  e.target.value.indexOf("."),
-                                                  4
-                                                )
-                                            )
-                                          );
-                                        } else {
-                                          setDolar(Number(e.target.value));
-                                        }
-                                      }
-                                      //console.log(Number(Dolar));
-                                    }}
-                                  />
+                                  <Dolar />
                                 </div>
                               </label>
                             </div>
@@ -543,8 +581,11 @@ function Table({ columns, data }) {
   );
 }
 
-function App({ on, at = null }) {
-  const columns = React.useMemo(
+function App({ on }) {
+  const [Dollar, setDollar] = useGlobalState("dollar");
+  const [dataTable, setDataTable] = useGlobalState("dataTable");
+
+  const colunas = React.useMemo(
     () => [
       {
         Header: "Código",
@@ -570,14 +611,39 @@ function App({ on, at = null }) {
     []
   );
 
-  const site = "/api/table/" + on;
-  if (at != null) site = "/api/table/" + on + "/" + at;
+  const site = "/api/table/" + on + "/" + Dollar;
   const { data, error } = useSwr(site, fetcher);
 
   if (error) return "Error";
-  if (!data) return "Loading...";
+  if (!data) return [];
 
-  return <Table columns={columns} data={data} />;
+  return (
+    <Table
+      columns={[
+        {
+          Header: "Código",
+          accessor: "Código",
+        },
+        {
+          Header: "Produto",
+          accessor: "Produto",
+        },
+        {
+          Header: "Custo (U$)",
+          accessor: "Valor (U$)",
+        },
+        {
+          Header: "Custo (R$)",
+          accessor: "Custo",
+        },
+        {
+          Header: "Valor (R$)",
+          accessor: "Venda",
+        },
+      ]}
+      data={data}
+    />
+  );
 }
 
 export default App;
