@@ -1,5 +1,5 @@
-import Layout from "../../components/Layout";
-import PageTable from "../../middleware/react-table";
+import Layout from "../../components/Views/Layout/Layout";
+import PageTable from "../../components/Controllers/react-table";
 
 export default function Excell() {
   return (

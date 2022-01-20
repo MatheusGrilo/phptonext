@@ -1,7 +1,6 @@
-//https://tailwindui.com/#product-application-ui
-import Layout from "../components/Layout";
+import Layout from "../components/Views/Layout/Layout";
 import Link from "next/link";
-import CurrentDolar from "../middleware/currentdolar";
+import CurrentDolar from "../components/Controllers/currentdolar";
 
 export default function Home() {
   return (

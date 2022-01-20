@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon, AtSymbolIcon } from "@heroicons/react/outline";
-import CurrentDolar from "../middleware/currentdolar";
+import CurrentDolar from "../../Controllers/currentdolar";
 
 function Page(href) {
   const router = useRouter();

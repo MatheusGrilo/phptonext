@@ -1,4 +1,4 @@
-import Layout from "../components/Layout";
+import Layout from "../components/Views/Layout/Layout";
 import Link from "next/link";
 
 export default function Custom404() {

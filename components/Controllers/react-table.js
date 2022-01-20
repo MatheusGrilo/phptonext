@@ -23,7 +23,7 @@ import {
   XCircleIcon,
   CogIcon,
 } from "@heroicons/react/outline";
-import CurrentDolar from "../middleware/currentdolar";
+import CurrentDolar from "./currentdolar";
 import { matchSorter } from "match-sorter";
 import { Popover, Transition, Switch, Dialog } from "@headlessui/react";
 
