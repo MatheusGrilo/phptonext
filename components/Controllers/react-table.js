@@ -20,29 +20,53 @@ import {
   ChevronDoubleRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  XCircleIcon,
   CogIcon,
 } from "@heroicons/react/outline";
-import CurrentDolar from "./currentdolar";
 import { matchSorter } from "match-sorter";
 import { Popover, Transition, Switch, Dialog } from "@headlessui/react";
+import Loading from "../Views/Loading";
 
-const initialState = { clientEnabled: true, dollar: 0, dataTable: null };
+const initialState = {
+  clientEnabled: true,
+  dollar: 0,
+  dataTable: [],
+  query: 0,
+};
 const { useGlobalState } = createGlobalState(initialState);
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 function Dolar() {
   const [Dollar, setDollar] = useGlobalState("dollar");
+  const [query, setQuery] = useGlobalState("query");
   const { data, error } = useSwr("/api/currency/brl", fetcher);
+
+  useEffect(() => {
+    if (query == 0) {
+      setDollar(
+        Number(parseFloat(parseFloat(data.data) + parseFloat(0.3)).toFixed(2))
+      );
+      setQuery(
+        Number(parseFloat(parseFloat(data.data) + parseFloat(0.3)).toFixed(2))
+      );
+      //console.log("dolar loaded for the first time");
+    }
+  }, [query]);
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => setDollar(query), 2000);
+    return () => clearTimeout(timeOutId);
+  }, [query]);
+
   if (error) return <div>Error</div>;
   if (!data) return <div>...</div>;
-  if (data == data.data) {
-    setDollar(
-      Number(parseFloat(parseFloat(data.data) + parseFloat(0.3)).toFixed(2))
-    );
-  }
-  console.log("dolar loaded");
+
+  /*
+  const onChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value);
+    //console.log(Dolar);
+  }, 200);
+  */
 
   return (
     <>
@@ -52,24 +76,24 @@ function Dolar() {
         max="100.00"
         step="0.01"
         className="border-0 placeholder-gray-600 dark:placeholder-gray-200 text-gray-600 dark:text-gray-200 bg-gray-100 dark:bg-gray-600 dark:border-gray-600 block min-w-24 w-24 pl-7 pr-3 text-sm sm:text-sm rounded-md text-right h-6"
-        value={Dollar}
+        value={query}
         onChange={(e) => {
           if (e.target.value == "" || null || 0) {
-            setDollar(
+            setQuery(
               Number(
                 parseFloat(parseFloat(data.data) + parseFloat(0.3)).toFixed(2)
               )
             );
           } else {
             if (e.target.value.indexOf(".") >= 0) {
-              setDollar(
+              setQuery(
                 Number(
                   e.target.value.substring(0, e.target.value.indexOf(".")) +
                     e.target.value.substring(e.target.value.indexOf("."), 4)
                 )
               );
             } else {
-              setDollar(Number(e.target.value));
+              setQuery(Number(e.target.value));
             }
           }
           //console.log("Dolar: " + Dollar);
@@ -148,7 +172,7 @@ fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
 function Table({ columns, data, onFetchData }) {
-  const [dataTable, setData] = React.useState([]);
+  const [dataTable, setDataTable] = useGlobalState("dataTable");
   const skipPageResetRef = React.useRef();
 
   const updateData = (newData) => {
@@ -156,13 +180,20 @@ function Table({ columns, data, onFetchData }) {
     // to disable all of the auto resetting
     skipPageResetRef.current = true;
 
-    setData(newData);
+    setDataTable(newData);
   };
 
-  React.useEffect(() => {
-    // After the table has updated, always remove the flag
-    skipPageResetRef.current = false;
-  });
+  //React.useEffect(() => {
+  // After the table has updated, always remove the flag
+  //skipPageResetRef.current = false;
+  //});
+  const [clientEnabled, setClientEnabled] = useGlobalState("clientEnabled");
+  useEffect(() => {
+    setClientEnabled(true);
+    toggleHideColumn("Valor (U$)", true);
+    toggleHideColumn("Custo", true);
+    //console.log("client enabled");
+  }, []);
 
   const filterTypes = React.useMemo(
     () => ({
@@ -211,9 +242,7 @@ function Table({ columns, data, onFetchData }) {
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
       globalFilter: fuzzyTextFilterFn,
-      initialState: {
-        hiddenColumns: ["Valor (U$)", "Custo"],
-      },
+      /*
       autoResetPage: !skipPageResetRef.current,
       autoResetExpanded: !skipPageResetRef.current,
       autoResetGroupBy: !skipPageResetRef.current,
@@ -221,6 +250,7 @@ function Table({ columns, data, onFetchData }) {
       autoResetSortBy: !skipPageResetRef.current,
       autoResetFilters: !skipPageResetRef.current,
       autoResetRowState: !skipPageResetRef.current,
+      */
     },
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
@@ -228,7 +258,6 @@ function Table({ columns, data, onFetchData }) {
     usePagination
   );
 
-  const [clientEnabled, setClientEnabled] = useGlobalState("clientEnabled");
   const [Dollar, setDollar] = useGlobalState("dollar");
 
   function toggleClient() {
@@ -475,20 +504,22 @@ function Table({ columns, data, onFetchData }) {
                             </label>
                           </div>
                         </div>
-                        {clientEnabled == false ? (
-                          <div className="px-1 py-1 ">
-                            <div>
-                              <label className="cursor-pointer inline-flex">
-                                <span className="text-gray-700 dark:text-gray-200 mx-4">
-                                  Cotação
-                                </span>
-                                <div className="mx-4">
-                                  <Dolar />
-                                </div>
-                              </label>
-                            </div>
+                        <div
+                          className={`${
+                            clientEnabled ? "hidden" : null
+                          } px-1 py-1`}
+                        >
+                          <div>
+                            <label className="cursor-pointer inline-flex">
+                              <span className="text-gray-700 dark:text-gray-200 mx-4">
+                                Cotação
+                              </span>
+                              <div className="mx-4">
+                                <Dolar />
+                              </div>
+                            </label>
                           </div>
-                        ) : null}
+                        </div>
                       </Popover.Panel>
                     </Transition>
                   </Popover>
@@ -584,65 +615,60 @@ function Table({ columns, data, onFetchData }) {
 function App({ on }) {
   const [Dollar, setDollar] = useGlobalState("dollar");
   const [dataTable, setDataTable] = useGlobalState("dataTable");
+  const [loading, setLoading] = useState(true);
+  const [siteApi, setSiteApi] = useState("/api/table/" + on);
 
-  const colunas = React.useMemo(
-    () => [
-      {
-        Header: "Código",
-        accessor: "Código",
-      },
-      {
-        Header: "Produto",
-        accessor: "Produto",
-      },
-      {
-        Header: "Custo (U$)",
-        accessor: "Valor (U$)",
-      },
-      {
-        Header: "Custo (R$)",
-        accessor: "Custo",
-      },
-      {
-        Header: "Valor (R$)",
-        accessor: "Venda",
-      },
-    ],
-    []
-  );
+  const { data, error, isValidating } = useSwr(siteApi, fetcher);
 
-  const site = "/api/table/" + on + "/" + Dollar;
-  const { data, error } = useSwr(site, fetcher);
+  useEffect(() => {
+    if (Dollar != 0) {
+      //console.log("effect dollar change: " + Dollar);
+      //setLoading(true);
+      setSiteApi("/api/table/" + on + "/" + Dollar);
+    }
+  }, [Dollar]);
 
-  if (error) return "Error";
-  if (!data) return [];
+  useEffect(() => {
+    //setTimeout(() => {
+    if (isValidating == false) {
+      //console.log("isValidating: " + isValidating);
+      //setLoading(false);
+      setDataTable(data);
+    }
+    //}, 1000);
+  }, [isValidating]);
 
   return (
-    <Table
-      columns={[
-        {
-          Header: "Código",
-          accessor: "Código",
-        },
-        {
-          Header: "Produto",
-          accessor: "Produto",
-        },
-        {
-          Header: "Custo (U$)",
-          accessor: "Valor (U$)",
-        },
-        {
-          Header: "Custo (R$)",
-          accessor: "Custo",
-        },
-        {
-          Header: "Valor (R$)",
-          accessor: "Venda",
-        },
-      ]}
-      data={data}
-    />
+    <>
+      <Table
+        columns={[
+          {
+            Header: "Código",
+            accessor: "Código",
+          },
+          {
+            Header: "Produto",
+            accessor: "Produto",
+          },
+          {
+            Header: "Custo (U$)",
+            accessor: "Valor (U$)",
+          },
+          {
+            Header: "Custo (R$)",
+            accessor: "Custo",
+          },
+          {
+            Header: "Valor (R$)",
+            accessor: "Venda",
+          },
+        ]}
+        data={dataTable}
+        //loading={loading}
+        //loadingText="Loading..."
+        //LoadingComponent={Loading}
+      />
+    </>
   );
 }
 

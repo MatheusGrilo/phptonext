@@ -23,7 +23,7 @@ import {
   XCircleIcon,
   CogIcon,
 } from "@heroicons/react/outline";
-import CurrentDolar from "../middleware/currentdolar";
+import CurrentDolar from "./currentdolar";
 import { matchSorter } from "match-sorter";
 import { Popover, Transition, Switch, Dialog } from "@headlessui/react";
 
@@ -42,6 +42,7 @@ function Dolar() {
       Number(parseFloat(parseFloat(data.data) + parseFloat(0.3)).toFixed(2))
     );
   }
+  console.log("dolar loaded");
 
   return (
     <>
@@ -146,7 +147,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
-function Table({ columns, data }) {
+function Table({ columns, data, onFetchData }) {
   const [dataTable, setData] = React.useState([]);
   const skipPageResetRef = React.useRef();
 
@@ -196,7 +197,7 @@ function Table({ columns, data }) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize, globalFilter },
+    state: { pageIndex, pageSize, globalFilter, sortBy, filters },
     prepareRow,
     state,
     visibleColumns,
@@ -584,7 +585,7 @@ function App({ on }) {
   const [Dollar, setDollar] = useGlobalState("dollar");
   const [dataTable, setDataTable] = useGlobalState("dataTable");
 
-  const columns = React.useMemo(
+  const colunas = React.useMemo(
     () => [
       {
         Header: "Código",
@@ -613,10 +614,36 @@ function App({ on }) {
   const site = "/api/table/" + on + "/" + Dollar;
   const { data, error } = useSwr(site, fetcher);
 
-  if (error) return null;
-  if (!data) return null;
+  if (error) return "Error";
+  if (!data) return [];
 
-  return <Table columns={columns} data={data} />;
+  return (
+    <Table
+      columns={[
+        {
+          Header: "Código",
+          accessor: "Código",
+        },
+        {
+          Header: "Produto",
+          accessor: "Produto",
+        },
+        {
+          Header: "Custo (U$)",
+          accessor: "Valor (U$)",
+        },
+        {
+          Header: "Custo (R$)",
+          accessor: "Custo",
+        },
+        {
+          Header: "Valor (R$)",
+          accessor: "Venda",
+        },
+      ]}
+      data={data}
+    />
+  );
 }
 
 export default App;
