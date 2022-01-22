@@ -1,5 +1,6 @@
 import { ThemeProvider } from "next-themes";
 import NextNProgress from "nextjs-progressbar";
+import "regenerator-runtime/runtime";
 
 import "../styles/globals.css";
 
