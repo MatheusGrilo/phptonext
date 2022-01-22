@@ -171,10 +171,13 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
-function Table({ columns, data, onFetchData }) {
+function Table({ columns, data }) {
   const [dataTable, setDataTable] = useGlobalState("dataTable");
-  const skipPageResetRef = React.useRef();
+  const [clientEnabled, setClientEnabled] = useGlobalState("clientEnabled");
+  const [Dollar, setDollar] = useGlobalState("dollar");
+  //const skipPageResetRef = React.useRef();
 
+  /*
   const updateData = (newData) => {
     // When data gets updated with this function, set a flag
     // to disable all of the auto resetting
@@ -182,18 +185,28 @@ function Table({ columns, data, onFetchData }) {
 
     setDataTable(newData);
   };
+  */
 
   //React.useEffect(() => {
   // After the table has updated, always remove the flag
   //skipPageResetRef.current = false;
   //});
-  const [clientEnabled, setClientEnabled] = useGlobalState("clientEnabled");
   useEffect(() => {
     setClientEnabled(true);
     toggleHideColumn("Valor (U$)", true);
     toggleHideColumn("Custo", true);
     //console.log("client enabled");
   }, []);
+
+  useEffect(() => {
+    if (clientEnabled == true) {
+      toggleHideColumn("Valor (U$)", true);
+      toggleHideColumn("Custo", true);
+    } else {
+      toggleHideColumn("Valor (U$)", false);
+      toggleHideColumn("Custo", false);
+    }
+  }, [dataTable, Dollar]);
 
   const filterTypes = React.useMemo(
     () => ({
@@ -242,6 +255,9 @@ function Table({ columns, data, onFetchData }) {
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
       globalFilter: fuzzyTextFilterFn,
+      initialState: {
+        hiddenColumns: ["Valor (U$)", "Custo"],
+      },
       /*
       autoResetPage: !skipPageResetRef.current,
       autoResetExpanded: !skipPageResetRef.current,
@@ -257,8 +273,6 @@ function Table({ columns, data, onFetchData }) {
     useSortBy,
     usePagination
   );
-
-  const [Dollar, setDollar] = useGlobalState("dollar");
 
   function toggleClient() {
     setClientEnabled(!clientEnabled);

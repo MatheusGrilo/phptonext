@@ -2,8 +2,21 @@ import ThemeToggle from "./ThemeToggle";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
-import { MenuIcon, XIcon, AtSymbolIcon } from "@heroicons/react/outline";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import CurrentDolar from "../../Controllers/currentdolar";
+import { useSession, signIn, signOut } from "next-auth/react";
+
+export function Username() {
+  const { data: session } = useSession();
+  if (session) {
+    return <>{session.user.email}</>;
+  }
+  return (
+    <>
+      <button onClick={() => signIn()}>Login</button>
+    </>
+  );
+}
 
 function Page(href) {
   const router = useRouter();
@@ -48,7 +61,7 @@ export default function Navbar() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <AtSymbolIcon className="dark:text-white h-4 w-4" /> Grilo
+                  @ <Username />
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
