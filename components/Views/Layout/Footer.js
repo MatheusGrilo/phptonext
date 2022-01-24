@@ -10,7 +10,7 @@ function Footer() {
             <div className="sm:w-2/3 text-center py-2">
               <p className="text-sm text-blue-700 font-bold mb-2 dark:text-blue-400">
                 <Link href="/about" rel="noopener noreferrer">
-                  Grilo 2022 - Hosted on Vercel
+                  Grilo 2022 - Hosted on Vercel{/*Heroku*/}
                 </Link>
               </p>
             </div>
