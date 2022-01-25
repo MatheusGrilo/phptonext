@@ -9,7 +9,18 @@ import { useSession, signIn, signOut } from "next-auth/react";
 export function Username() {
   const { data: session } = useSession();
   if (session) {
-    return <>{session.user.email}</>;
+    return (
+      <>
+        <button
+          onClick={() => signOut()}
+          className="ml-2 before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-lime-500/50 relative inline-block"
+        >
+          <span className="relative dark:text-white text-black">
+            {session.user.name}
+          </span>
+        </button>
+      </>
+    );
   }
   return (
     <>

@@ -1,16 +1,56 @@
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "../../../lib/mongodb";
+import CredentialProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
-  adapter: MongoDBAdapter(clientPromise),
-  // Configure one or more authentication providers
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+    CredentialProvider({
+      name: "your username",
+      credentials: {
+        username: {
+          label: "Email",
+          type: "text",
+          placeholder: "grilo@vercel.com",
+        },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: (credentials) => {
+        // database look up
+        if (
+          credentials.username === "grilo" &&
+          credentials.password === "grilo1234"
+        ) {
+          return {
+            id: 2,
+            name: "Grilo",
+            email: "grilo@grilo.com",
+          };
+        }
+
+        // login failed
+        return null;
+      },
     }),
-    // ...add more providers here
   ],
+  callbacks: {
+    jwt: ({ token, user }) => {
+      // first time jwt callback is run, user object is available
+      if (user) {
+        token.id = user.id;
+      }
+
+      return token;
+    },
+    session: ({ session, token }) => {
+      if (token) {
+        session.id = token.id;
+      }
+
+      return session;
+    },
+  },
+  secret: "f7rqtPVfVvwgqdANfxps4JSnEsh2eGYV+ZzzkSE/9hc=",
+  jwt: {
+    secret: "f7rqtPVfVvwgqdANfxps4JSnEsh2eGYV+ZzzkSE/9hc=",
+    encryption: true,
+  },
 });
