@@ -27,7 +27,7 @@ async function lastUpdated(from) {
     //console.log(money)
     const converted = dayjs
       .tz(database[0].lastUpdated)
-      .format("HH:mm:ss - DD/MM/YYYY");
+      .format("DD/MM/YYYY - HH:mm:ss");
     //console.log(converted)
     return converted;
   } catch (err) {

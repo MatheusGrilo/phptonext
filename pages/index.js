@@ -1,68 +1,56 @@
 import Layout from "../components/Views/Layout/Layout";
 import Link from "next/link";
+import LastUpdates from "../components/Controllers/lastupdates";
 
 export default function Home() {
   return (
     <Layout title="Home page">
-      <div className="w-full flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
-        <div className="w-full sm:max-w-md p-5 mx-auto">
-          <h2 className="mb-12 text-center text-5xl font-extrabold">
-            Welcome.
-          </h2>
-          <form>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="email">
-                Email-Address
-              </label>
-              <input
-                id="email"
-                type="text"
-                name="email"
-                className="py-2 px-3 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm disabled:bg-gray-100 mt-1 block w-full"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-1" htmlFor="password">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                name="password"
-                className="py-2 px-3 border border-gray-300 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-200 focus:ring-opacity-50 rounded-md shadow-sm disabled:bg-gray-100 mt-1 block w-full"
-              />
-            </div>
-            <div className="mt-6 flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember_me"
-                  type="checkbox"
-                  className="border border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50"
-                />
-                <label
-                  htmlFor="remember_me"
-                  className="ml-2 block text-sm leading-5"
-                >
-                  {" "}
-                  Remember me{" "}
-                </label>
-              </div>
-              <a href="#" className="text-sm">
-                {" "}
-                Forgot your password?{" "}
-              </a>
-            </div>
-            <div className="mt-6">
-              <button className="w-full inline-flex items-center justify-center px-4 py-2 bg-orange-600/75 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-orange-700 active:bg-orange-700 focus:outline-none focus:border-orange-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition">
-                Sign In
+      <div className="container w-full md:px-40 mx-auto py-20">
+        <div className="md:grid lg:grid-cols-3 md:grid-cols-2 mlg:grid-cols-3 md:gap-10 space-y-6 md:space-y-0 px-10 md:px-0 mx-auto">
+          <div className="bg-gray-200 dark:bg-gray-800 p-6 shadow-md rounded-md">
+            <h3 className="text-xl text-gray-800 dark:text-gray-100 font-semibold mb-3">
+              Alborada
+            </h3>
+            <p className="mb-2">Última atualização:</p>
+            <p className="my-4">
+              <LastUpdates on="table" at="AlboradaRAW" page="index" />
+            </p>
+            <Link href="/alborada" passHref>
+              <button className="text-lg font-semibold text-white bg-orange-600/75 hover:bg-orange-700 px-4 py-1 block mx-auto rounded-md">
+                Entrar
               </button>
-            </div>
-            <div className="mt-6 text-center">
-              <a href="#" className="underline">
-                Sign up for an account
-              </a>
-            </div>
-          </form>
+            </Link>
+          </div>
+
+          <div className="bg-gray-200 dark:bg-gray-800 p-6 shadow-md rounded-md">
+            <h3 className="text-xl text-gray-800 dark:text-gray-100 font-semibold mb-3">
+              Excell
+            </h3>
+            <p className="mb-2">Última atualização:</p>
+            <p className="my-4">
+              <LastUpdates on="table" at="ExcellRAW" page="index" />
+            </p>
+            <Link href="/excell" passHref>
+              <button className="text-lg font-semibold text-white bg-orange-600/75 hover:bg-orange-700 px-4 py-1 block mx-auto rounded-md">
+                Entrar
+              </button>
+            </Link>
+          </div>
+
+          <div className="bg-gray-200 dark:bg-gray-800 p-6 shadow-md rounded-md">
+            <h3 className="text-xl text-gray-800 dark:text-gray-100 font-semibold mb-3">
+              Cartuchos e Toners
+            </h3>
+            <p className="mb-2">Última atualização:</p>
+            <p className="my-4">
+              <LastUpdates on="table" at="AlboradaRAW" page="index" />
+            </p>
+            <Link href="/toners" passHref>
+              <button className="text-lg font-semibold text-white bg-orange-600/75 hover:bg-orange-700 px-4 py-1 block mx-auto rounded-md">
+                Entrar
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </Layout>
