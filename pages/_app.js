@@ -1,20 +1,20 @@
-import { SessionProvider } from "next-auth/react";
+import { UserProvider } from "@auth0/nextjs-auth0";
 import { ThemeProvider } from "next-themes";
 import NextNProgress from "nextjs-progressbar";
 import "regenerator-runtime/runtime";
 
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps, session }) {
+function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider attribute="class">
-      <NextNProgress />
-      <div id="main-root" className="flex flex-col h-screen justify-between">
-        <SessionProvider session={session}>
+    <UserProvider>
+      <ThemeProvider attribute="class">
+        <NextNProgress />
+        <div id="main-root" className="flex flex-col h-screen justify-between">
           <Component {...pageProps} />
-        </SessionProvider>
-      </div>
-    </ThemeProvider>
+        </div>
+      </ThemeProvider>
+    </UserProvider>
   );
 }
 

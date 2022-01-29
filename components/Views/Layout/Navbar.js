@@ -4,30 +4,7 @@ import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import CurrentDolar from "../../Controllers/currentdolar";
-import { useSession, signIn, signOut } from "next-auth/react";
-
-export function Username() {
-  const { data: session } = useSession();
-  if (session) {
-    return (
-      <>
-        <button
-          onClick={() => signOut()}
-          className="ml-2 before:block before:absolute before:-inset-1 before:-skew-y-3 before:bg-lime-500/50 relative inline-block"
-        >
-          <span className="relative dark:text-white text-black">
-            {session.user.name}
-          </span>
-        </button>
-      </>
-    );
-  }
-  return (
-    <>
-      <button onClick={() => signIn()}>Login</button>
-    </>
-  );
-}
+import User from "./Navbar/User";
 
 function Page(href) {
   const router = useRouter();
@@ -72,7 +49,7 @@ export default function Navbar() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  @ <Username />
+                  <User />
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">

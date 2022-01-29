@@ -21,6 +21,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CogIcon,
+  XIcon,
 } from "@heroicons/react/outline";
 import { matchSorter } from "match-sorter";
 import { Popover, Transition, Switch, Dialog } from "@headlessui/react";
@@ -291,6 +292,7 @@ function Table({ columns, data }) {
   }
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -300,8 +302,19 @@ function Table({ columns, data }) {
     setIsOpen(true);
   }
 
+  function closeAddModal() {
+    setIsAddOpen(false);
+  }
+
+  function openAddModal() {
+    setIsAddOpen(true);
+  }
+
   return (
     <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:py-4 lg:px-8 lg:flex lg:items-center lg:justify-between">
+      {/**
+       * Begin of global modal
+       * */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -364,6 +377,99 @@ function Table({ columns, data }) {
           </div>
         </Dialog>
       </Transition>
+      {/**
+       * End of global modal
+       * */}
+
+      {/**
+       *  Begin of add modal
+       * */}
+      <Transition appear show={isAddOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={closeAddModal}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Dialog.Overlay className="fixed inset-0" />
+            </Transition.Child>
+
+            {/* This element is to trick the browser into centering the modal contents. */}
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-gray-200 dark:bg-gray-700 shadow-xl rounded-2xl">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-800 dark:text-gray-100"
+                >
+                  Item ID
+                </Dialog.Title>
+                <button
+                  className="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50"
+                  onClick={closeAddModal}
+                >
+                  <XIcon className="w-6 h-6" />
+                </button>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Item name.
+                  </p>
+                </div>
+
+                <div className="mt-4 container flex">
+                  Adicionar
+                  <div className="flex flex-row h-8 w-10 rounded-lg relative bg-transparent mx-4">
+                    <button
+                      data-action="decrement"
+                      className=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-4 rounded-l cursor-pointer outline-none"
+                    >
+                      <span className="m-auto text-2xl font-thin">−</span>
+                    </button>
+                    <input
+                      type="number"
+                      className="appearance-none outline-none focus:outline-none text-center w-10 bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700"
+                      name="custom-input-number"
+                      value="1"
+                    ></input>
+                    <button
+                      data-action="increment"
+                      className="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-4 rounded-r cursor-pointer"
+                    >
+                      <span className="m-auto text-2xl font-thin">+</span>
+                    </button>
+                  </div>
+                  <div>produtos</div>
+                </div>
+              </div>
+            </Transition.Child>
+          </div>
+        </Dialog>
+      </Transition>
+      {/**
+       *  End of add modal
+       * */}
       {/* <div>        
         <div>
           <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
@@ -587,14 +693,17 @@ function Table({ columns, data }) {
                 {row.cells.map((cell) => {
                   {
                     if (cell.column.Header == "Produto") {
-                      const url =
+                      {
+                        /*const url =
                         "https://www.alboradainfo.com/produto/" +
                         cell.row.original.Código +
                         ".html";
+                      */
+                      }
                       return (
                         <td {...cell.getCellProps()} className="p-2">
                           {/*console.log(cell.row.original.Código)*/}
-                          <a
+                          {/*<a
                             href={url}
                             rel="noreferrer"
                             target="_blank"
@@ -604,6 +713,10 @@ function Table({ columns, data }) {
                           >
                             {cell.render("Cell")}
                           </a>
+                          */}
+                          <button onClick={openAddModal}>
+                            {cell.render("Cell")}
+                          </button>
                           {/*console.log(cell.render("Cell"))*/}
                         </td>
                       );
