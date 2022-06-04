@@ -1,6 +1,7 @@
 import Layout from "../components/Views/Layout/Layout";
 import React, { useState } from "react";
 import { ExternalLinkIcon } from "@heroicons/react/outline";
+import { SiWindows, SiJava, SiMediafire, SiEpson } from "react-icons/si";
 import { useUser } from "@auth0/nextjs-auth0";
 
 import Fuse from "fuse.js";
@@ -36,13 +37,11 @@ export default function Downloads() {
         <div className="box-border flex my-0 mx-auto py-0 px-4">
           <ul className="box-border flex-grow m-0 p-0">
             {dlResults.map((dl) => {
-              const { thumb, title, info, link_name, link, svg } = dl;
+              const { thumb, title, info, link_name, link } = dl;
+              const Icone = <dl.svg />;
               return (
                 <li key={title} className="box-border flex mb-4">
-                  <img
-                    src={`https://cdn.jsdelivr.net/npm/simple-icons@v6/icons/${svg}.svg`}
-                    className="bg-no-repeat bg-cover rounded-md box-border h-16 mr-2.5 w-16 fill-black dark:fill-white"
-                  />
+                  <Icone className="h-16 w-16" />
 
                   <ul className="box-border flex-grow m-0 p-0">
                     <li className="box-border mb-1">
@@ -73,7 +72,7 @@ export default function Downloads() {
                 type="text"
                 value={query}
                 onChange={onSearch}
-                className="bg-none rounded-md border-solid border-2 box-border text-base py-3 px-4 w-full"
+                className="bg-none rounded-md border-solid border-2 box-border text-base py-3 px-4 w-full uppercase"
               />
             </form>
           </aside>
