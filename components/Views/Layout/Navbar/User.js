@@ -3,6 +3,8 @@ import {
   UserIcon,
   LogoutIcon,
   FolderDownloadIcon,
+  RefreshIcon,
+  LoginIcon,
 } from "@heroicons/react/outline";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { useUser } from "@auth0/nextjs-auth0";
@@ -66,6 +68,15 @@ export function User() {
                 </Menu.Item>
                 <Menu.Item>
                   <MyLink
+                    href="/updates"
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 capitalize flex"
+                  >
+                    <RefreshIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    Updates
+                  </MyLink>
+                </Menu.Item>
+                <Menu.Item>
+                  <MyLink
                     href="/api/auth/logout"
                     className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 capitalize flex"
                   >
@@ -81,7 +92,10 @@ export function User() {
 
       {!isLoading && !user && (
         <>
-          <Link href="/api/auth/login">Login</Link>
+          <MyLink href="/api/auth/login" className="flex">
+            <LoginIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+            Login
+          </MyLink>
         </>
       )}
     </>

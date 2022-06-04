@@ -25,7 +25,7 @@ const navigation = [
   { name: "Alborada", href: "/alborada" },
   { name: "Excell", href: "/excell" },
   { name: "Toners", href: "/toners" },
-  { name: "Updates", href: "/updates" },
+  { name: "Downloads", href: "/downloads" },
   { name: "Sobre", href: "/about" },
 ];
 

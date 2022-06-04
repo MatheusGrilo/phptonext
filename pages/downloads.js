@@ -1,73 +1,84 @@
 import Layout from "../components/Views/Layout/Layout";
-import Login from "../components/Controllers/User/login";
+import React, { useState } from "react";
+import { ExternalLinkIcon } from "@heroicons/react/outline";
+import { useUser } from "@auth0/nextjs-auth0";
+
+import Fuse from "fuse.js";
+
+import dls from "./dl.json";
 
 export default function Downloads() {
+  const { user, isLoading } = useUser();
+  const [query, updateQuery] = useState("");
+
+  const fuse = new Fuse(dls, {
+    keys: ["title", "info"],
+    includeScore: true,
+  });
+
+  const results = fuse.search(query);
+  const dlResults = query ? results.map((dl) => dl.item) : dls;
+
+  function onSearch({ currentTarget }) {
+    updateQuery(currentTarget.value);
+  }
   return (
-    <Login>
-      <Layout title="Downloads">
-        <div className="w-3/4 m-auto py-16 flex">
-          <div className="text-left">
-            <h1 className="text-6xl font-medium py-8">Downloads</h1>
-            <p className="text-2xl pb-8 font-medium">
-              Made with{" "}
-              <a
-                href="https://nodejs.org/"
-                target="_blank"
-                className="text-blue-500 hover:text-blue-400"
-                rel="noreferrer"
-              >
-                Node.JS
-              </a>
-              ,{" "}
-              <a
-                href="https://www.mongodb.com/"
-                target="_blank"
-                className="text-blue-500 hover:text-blue-400"
-                rel="noreferrer"
-              >
-                MongoDB
-              </a>
-              ,{" "}
-              <a
-                href="https://datatables.net/"
-                target="_blank"
-                className="text-blue-500 hover:text-blue-400"
-                rel="noreferrer"
-              >
-                DataTables
-              </a>
-              ,{" "}
-              <a
-                href="https://nextjs.org/"
-                target="_blank"
-                className="text-blue-500 hover:text-blue-400"
-                rel="noreferrer"
-              >
-                Next.JS
-              </a>{" "}
-              with{" "}
-              <a
-                href="https://reactjs.org/"
-                target="_blank"
-                className="text-blue-500 hover:text-blue-400"
-                rel="noreferrer"
-              >
-                React
-              </a>{" "}
-              and{" "}
-              <a
-                href="https://tailwindcss.com/"
-                target="_blank"
-                className="text-blue-500 hover:text-blue-400"
-                rel="noreferrer"
-              >
-                TailWindCSS
-              </a>
-              .
-            </p>
+    <Layout title="Downloads">
+      <section className="container mx-auto p-6 font-mono">
+        <div className="box-border mb-4 px-0 py-8">
+          <div className="flex">
+            <h1 className="uppercase text-center font-bold text-white m-0">
+              Downloads
+            </h1>
           </div>
         </div>
-      </Layout>
-    </Login>
+
+        <div className="box-border flex my-0 mx-auto py-0 px-4">
+          <ul className="box-border flex-grow m-0 p-0">
+            {dlResults.map((dl) => {
+              const { thumb, title, info, link_name, link, svg } = dl;
+              return (
+                <li key={title} className="box-border flex mb-4">
+                  <img
+                    src={`https://cdn.jsdelivr.net/npm/simple-icons@v6/icons/${svg}.svg`}
+                    className="bg-no-repeat bg-cover rounded-md box-border h-16 mr-2.5 w-16 fill-black dark:fill-white"
+                  />
+
+                  <ul className="box-border flex-grow m-0 p-0">
+                    <li className="box-border mb-1">
+                      <strong>Title: </strong>
+                      {title}
+                    </li>
+                    <li className="box-border mb-1">
+                      <strong>Info: </strong>
+                      {info}
+                    </li>
+                    <li className="box-border mb-1">
+                      <strong>Links: </strong>
+                      <a href={link} target="_blank" rel="noreferrer">
+                        {link_name}
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              );
+            })}
+          </ul>
+          <aside>
+            <form className="box-border">
+              <label className="box-border block font-bold text-xl mb-1 uppercase">
+                Search
+              </label>
+              <input
+                type="text"
+                value={query}
+                onChange={onSearch}
+                className="bg-none rounded-md border-solid border-2 box-border text-base py-3 px-4 w-full"
+              />
+            </form>
+          </aside>
+        </div>
+      </section>
+    </Layout>
   );
 }
