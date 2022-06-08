@@ -1,7 +1,6 @@
 import Layout from "../components/Views/Layout/Layout";
 import React, { useState } from "react";
-import { ExternalLinkIcon } from "@heroicons/react/outline";
-import { SiWindows, SiJava, SiMediafire, SiEpson } from "react-icons/si";
+import { ExternalLinkIcon, CloudUploadIcon } from "@heroicons/react/outline";
 import { useUser } from "@auth0/nextjs-auth0";
 
 import Fuse from "fuse.js";
@@ -26,56 +25,76 @@ export default function Downloads() {
   return (
     <Layout title="Downloads">
       <section className="container mx-auto p-6 font-mono">
-        <div className="box-border mb-4 px-0 py-8">
-          <div className="flex">
-            <h1 className="uppercase text-center font-bold text-white m-0">
-              Downloads
-            </h1>
+        <div className="w-full mb-8 overflow-hidden shadow-lg">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-100 text-center dark:bg-gray-800 uppercase">
+                  <th className="p-2 border-l border-t border-gray-400 dark:border-gray-600">
+                    <div className="flex">
+                      <div>Arquivo</div>
+
+                      <div className="mx-4">
+                        <input
+                          value={query}
+                          onChange={onSearch}
+                          className="border-0 rounded-md w-48 p-1 placeholder-gray-600 dark:placeholder-gray-200 text-sm text-gray-600 dark:text-gray-200 bg-gray-200 dark:bg-gray-700 inline text-center dark:border-gray-600"
+                          placeholder="Procurar"
+                        />
+                      </div>
+                      <div className="mx-4 flex">
+                        <CloudUploadIcon className="w-6 h-6 mr-1" />
+                        Adicionar link
+                      </div>
+                    </div>
+                  </th>
+                  <th className="p-2 border-t border-r border-gray-400 dark:border-gray-600">
+                    Download
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="bg-white dark:bg-gray-800">
+                {dlResults.map((dl) => {
+                  const { thumb, title, info, link_name, link, svg, _id } = dl;
+
+                  function Icon({ svg }) {
+                    return <svg className="h-16 w-16" />;
+                  }
+                  return (
+                    <tr
+                      className="border border-gray-400 bg-gray-100 dark:border-gray-600 text-sm text-gray-600 dark:text-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-900"
+                      key={_id}
+                    >
+                      <td className="p-2">
+                        <div className="flex items-center text-sm">
+                          <div>
+                            <p className="font-semibold text-black dark:text-gray-50">
+                              {title}
+                            </p>
+                            <p className="text-xs text-gray-600 dark:text-gray-300">
+                              {info}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-ms font-semibold">
+                        <a
+                          href={link}
+                          target="_blank"
+                          className="inline-flex text-green-700 dark:text-green-400 hover:underline"
+                          rel="noreferrer"
+                        >
+                          <ExternalLinkIcon className="w-6 h-6 mr-1" />
+                          <span>{link_name}</span>
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-        </div>
-
-        <div className="box-border flex my-0 mx-auto py-0 px-4">
-          <ul className="box-border flex-grow m-0 p-0">
-            {dlResults.map((dl) => {
-              const { thumb, title, info, link_name, link } = dl;
-              const Icone = <dl.svg />;
-              return (
-                <li key={title} className="box-border flex mb-4">
-                  <Icone className="h-16 w-16" />
-
-                  <ul className="box-border flex-grow m-0 p-0">
-                    <li className="box-border mb-1">
-                      <strong>Title: </strong>
-                      {title}
-                    </li>
-                    <li className="box-border mb-1">
-                      <strong>Info: </strong>
-                      {info}
-                    </li>
-                    <li className="box-border mb-1">
-                      <strong>Links: </strong>
-                      <a href={link} target="_blank" rel="noreferrer">
-                        {link_name}
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              );
-            })}
-          </ul>
-          <aside>
-            <form className="box-border">
-              <label className="box-border block font-bold text-xl mb-1 uppercase">
-                Search
-              </label>
-              <input
-                type="text"
-                value={query}
-                onChange={onSearch}
-                className="bg-none rounded-md border-solid border-2 box-border text-base py-3 px-4 w-full uppercase"
-              />
-            </form>
-          </aside>
         </div>
       </section>
     </Layout>
