@@ -7,8 +7,8 @@
     "link_name": "MediaFire",
     "svg": "SiMediafire",
     "tags": "InfoHouse",
-    "upload": null,
-    "user": true
+    "uploader": "Grilo",
+    "needUser": true
   },
   {
     "_id": "2",
@@ -18,8 +18,8 @@
     "link_name": "MediaFire",
     "svg": "SiJava",
     "tags": ["Public", ".exe"],
-    "upload": null,
-    "user": false
+    "uploader": "Grilo",
+    "needUser": false
   },
   {
     "_id": "3",
@@ -29,8 +29,8 @@
     "link_name": "MediaFire",
     "svg": "SiEpson",
     "tags": ["InfoHouse", ".rar"],
-    "upload": null,
-    "user": true
+    "uploader": "Grilo",
+    "needUser": true
   },
   {
     "_id": "4",
@@ -40,7 +40,7 @@
     "link_name": "MediaFire",
     "svg": "SiWindows",
     "tags": ["InfoHouse", ".zip"],
-    "upload": null,
-    "user": true
+    "uploader": "Grilo",
+    "needUser": true
   }
 ]
