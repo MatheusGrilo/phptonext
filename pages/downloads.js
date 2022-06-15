@@ -7,7 +7,7 @@ import {
   HiOutlineDocumentText,
   HiLink,
   HiExternalLink,
-  HiDownload,
+  //HiDownload,
   HiOutlineGlobe,
   HiKey,
   HiUser,

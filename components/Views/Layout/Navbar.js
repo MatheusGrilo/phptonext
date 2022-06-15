@@ -2,7 +2,7 @@ import ThemeToggle from "./ThemeToggle";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Disclosure } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
+import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 import CurrentDolar from "../../Controllers/currentdolar";
 import User from "./Navbar/User";
 
@@ -41,9 +41,12 @@ export default function Navbar() {
                 <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XIcon className="block h-6 w-6" aria-hidden="true" />
+                    <HiOutlineX className="block h-6 w-6" aria-hidden="true" />
                   ) : (
-                    <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+                    <HiOutlineMenu
+                      className="block h-6 w-6"
+                      aria-hidden="true"
+                    />
                   )}
                 </Disclosure.Button>
               </div>

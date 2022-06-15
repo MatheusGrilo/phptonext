@@ -1,5 +1,4 @@
 import dbConnect from "../../../../lib/dbConnect";
-import Currency from "../../../../models/Currency";
 import Table from "../../../../models/Table";
 
 export default async function handler(req, res) {
@@ -10,24 +9,11 @@ export default async function handler(req, res) {
         .limit(1)
         .sort({ $natural: -1 })
         .then((res) => {
-          //console.log(res)
+          //console.log(res);
           //resolve(res)
           resolve(res);
         });
     });
-  }
-
-  async function getDolar(choose) {
-    try {
-      const money = await lastDB(Currency, "default");
-      //console.log(money);
-      const fixed = parseFloat(money[0].body.rates[choose]).toFixed(2);
-      //console.log(fixed);
-      return fixed;
-    } catch (err) {
-      //console.log(err);
-      console.log(choose + " do not exist in the database.");
-    }
   }
 
   async function getTable(name) {
@@ -35,7 +21,7 @@ export default async function handler(req, res) {
       const money = await lastDB(Table, name);
       //console.log(money)
       const fixed = money[0].body;
-      //console.log(fixed)
+      //console.log(fixed);
       return fixed;
     } catch (err) {
       console.log("table " + name + " do not exist in database.");
@@ -43,14 +29,12 @@ export default async function handler(req, res) {
   }
 
   async function addValores(value) {
-    const stuff = await getDolar("BRL");
-    const extra = parseFloat(value).toFixed(2);
-    const currentdolar = parseFloat(stuff).toFixed(2);
-    const newdolar = parseFloat(currentdolar) + parseFloat(extra);
+    const newdolar = parseFloat(value.replace(/,/, ".")).toFixed(2);
+    //console.log("value " + value);
+    //console.log("newdolar " + newdolar);
 
     const slicedvalue = await getTable("AlboradaRAW");
     const datadone = await slicedvalue.slice(1);
-    //console.log(newdolar)
 
     datadone.forEach((obj) => {
       for (const [key, value] of Object.entries(obj)) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { MoonIcon, SunIcon } from "@heroicons/react/outline";
+import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
@@ -25,7 +25,7 @@ export default function ThemeToggle() {
       onClick={() => setTheme(isDark() ? "light" : "dark")}
       aria-label="Theme toggle"
     >
-      {isDark() ? <SunIcon size={24} /> : <MoonIcon size={24} />}
+      {isDark() ? <HiOutlineSun size={24} /> : <HiOutlineMoon size={24} />}
     </button>
   );
 }

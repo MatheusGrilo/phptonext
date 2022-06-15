@@ -1,11 +1,11 @@
 import { Fragment, React } from "react";
 import {
-  UserIcon,
-  LogoutIcon,
-  FolderDownloadIcon,
-  RefreshIcon,
-  LoginIcon,
-} from "@heroicons/react/outline";
+  HiOutlineUser,
+  HiOutlineLogout,
+  HiOutlineFolderDownload,
+  HiOutlineRefresh,
+  HiOutlineLogin,
+} from "react-icons/hi";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { useUser } from "@auth0/nextjs-auth0";
 import Link from "next/link";
@@ -50,7 +50,10 @@ export function User() {
                     href="/profile"
                     className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 capitalize flex"
                   >
-                    <UserIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    <HiOutlineUser
+                      className="w-5 h-5 mr-2"
+                      aria-hidden="true"
+                    />
                     {user.nickname}
                   </MyLink>
                 </Menu.Item>
@@ -59,7 +62,7 @@ export function User() {
                     href="/downloads"
                     className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 capitalize flex"
                   >
-                    <FolderDownloadIcon
+                    <HiOutlineFolderDownload
                       className="w-5 h-5 mr-2"
                       aria-hidden="true"
                     />
@@ -71,7 +74,10 @@ export function User() {
                     href="/updates"
                     className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 capitalize flex"
                   >
-                    <RefreshIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    <HiOutlineRefresh
+                      className="w-5 h-5 mr-2"
+                      aria-hidden="true"
+                    />
                     Updates
                   </MyLink>
                 </Menu.Item>
@@ -80,7 +86,10 @@ export function User() {
                     href="/api/auth/logout"
                     className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 capitalize flex"
                   >
-                    <LogoutIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    <HiOutlineLogout
+                      className="w-5 h-5 mr-2"
+                      aria-hidden="true"
+                    />
                     Sair
                   </MyLink>
                 </Menu.Item>
@@ -93,7 +102,7 @@ export function User() {
       {!isLoading && !user && (
         <>
           <MyLink href="/api/auth/login" className="flex">
-            <LoginIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+            <HiOutlineLogin className="w-5 h-5 mr-2" aria-hidden="true" />
             Login
           </MyLink>
         </>

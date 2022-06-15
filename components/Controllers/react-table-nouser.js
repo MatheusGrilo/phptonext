@@ -11,7 +11,6 @@ import {
   usePagination,
   useSortBy,
 } from "react-table";
-
 import {
   HiOutlineSelector,
   HiOutlineChevronDown,
@@ -20,9 +19,9 @@ import {
   HiOutlineChevronDoubleRight,
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
-  HiOutlineCog,
   HiOutlineX,
 } from "react-icons/hi";
+
 import { matchSorter } from "match-sorter";
 import { Popover, Transition, Switch, Dialog } from "@headlessui/react";
 import Loading from "../Views/Loading";
@@ -572,80 +571,7 @@ function Table({ columns, data }) {
                 </div>
               </div>
             </th>
-            <th className="p-2 border-t border-r border-gray-400 dark:border-gray-600">
-              <div className="relative h-6 w-full">
-                <div className="absolute right-0 -top-2">
-                  <Popover as="div" className="relative inline-block text-left">
-                    <div>
-                      <Popover.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black dark:text-white rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-opacity-75">
-                        <HiOutlineCog className="w-6 h-6" />
-                      </Popover.Button>
-                    </div>
-                    <Transition
-                      enter="transition ease-out duration-200"
-                      enterFrom="opacity-0 translate-y-1"
-                      enterTo="opacity-100 translate-y-0"
-                      leave="transition ease-in duration-150"
-                      leaveFrom="opacity-100 translate-y-0"
-                      leaveTo="opacity-0 translate-y-1"
-                    >
-                      <Popover.Panel
-                        static="true"
-                        className="absolute right-0 w-56 mt-2 origin-top-right bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 divide-y divide-gray-100 dark:divide-gray-600 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                      >
-                        <div className="px-1 py-1 ">
-                          <div>
-                            <label className="cursor-pointer inline-flex">
-                              <span className="text-gray-700 dark:text-gray-200 mx-4">
-                                Modo cliente
-                              </span>
-                              <div className="mx-4">
-                                <Switch
-                                  checked={clientEnabled}
-                                  onChange={toggleClient}
-                                  className={`${
-                                    clientEnabled
-                                      ? "bg-green-600"
-                                      : "bg-red-500"
-                                  } relative inline-flex items-center h-6 rounded-full w-11`}
-                                >
-                                  <span className="sr-only">
-                                    Enable client mode
-                                  </span>
-                                  <span
-                                    className={`${
-                                      clientEnabled
-                                        ? "translate-x-6"
-                                        : "translate-x-1"
-                                    } inline-block w-4 h-4 transform bg-white rounded-full`}
-                                  />
-                                </Switch>
-                              </div>
-                            </label>
-                          </div>
-                        </div>
-                        <div
-                          className={`${
-                            clientEnabled ? "hidden" : null
-                          } px-1 py-1`}
-                        >
-                          <div>
-                            <label className="cursor-pointer inline-flex">
-                              <span className="text-gray-700 dark:text-gray-200 mx-4">
-                                Cotação
-                              </span>
-                              <div className="mx-4">
-                                <Dolar />
-                              </div>
-                            </label>
-                          </div>
-                        </div>
-                      </Popover.Panel>
-                    </Transition>
-                  </Popover>
-                </div>
-              </div>
-            </th>
+            <th className="p-2 border-t border-r border-gray-400 dark:border-gray-600"></th>
           </tr>
           {headerGroups.map((headerGroup) => (
             <tr

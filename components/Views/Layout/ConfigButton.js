@@ -1,5 +1,5 @@
 import React from "react";
-import { CogIcon } from "@heroicons/react/solid";
+import { HiCog } from "react-icons/hi";
 
 function ConfigButton() {
   return (
@@ -9,7 +9,7 @@ function ConfigButton() {
           type="submit"
           className="inline-flex items-center justify-center space-x-2 border border-transparent text-sm font-medium rounded-full w-12 h-12 text-white bg-orange-700/90 hover:bg-orange-800 transition-colors"
         >
-          <CogIcon className="w-6 h-6" />
+          <HiCog className="w-6 h-6" />
         </button>
       </div>
     </>

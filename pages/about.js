@@ -28,12 +28,30 @@ export default function About() {
               </a>
               ,{" "}
               <a
-                href="https://datatables.net/"
+                href="https://auth0.com/"
                 target="_blank"
                 className="text-blue-500 hover:text-blue-400"
                 rel="noreferrer"
               >
-                DataTables
+                Auth0
+              </a>
+              ,{" "}
+              <a
+                href="https://react-table-v7.tanstack.com/"
+                target="_blank"
+                className="text-blue-500 hover:text-blue-400"
+                rel="noreferrer"
+              >
+                React-Table
+              </a>
+              ,{" "}
+              <a
+                href="https://react-icons.github.io/react-icons/"
+                target="_blank"
+                className="text-blue-500 hover:text-blue-400"
+                rel="noreferrer"
+              >
+                React-Icons
               </a>
               ,{" "}
               <a

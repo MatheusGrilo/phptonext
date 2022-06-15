@@ -3,7 +3,7 @@ import Login from "../components/Controllers/User/login";
 import { useUser } from "@auth0/nextjs-auth0";
 
 export default function Profile() {
-  const { user, isLoading, isAuthenticated } = useUser();
+  const { user, isLoading } = useUser();
   return (
     <Login>
       {user && (
