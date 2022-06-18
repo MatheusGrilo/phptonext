@@ -5,8 +5,6 @@
     "info": "Pasta com todos os arquivos",
     "link": "https://www.mediafire.com/folder/kauzy8fazwuzs/InfoHouse",
     "link_name": "MediaFire",
-    "svg": "SiMediafire",
-    "tags": "InfoHouse",
     "uploader": "Grilo",
     "needUser": true
   },
@@ -16,8 +14,6 @@
     "info": "Versão antiga para conectividade social",
     "link": "https://www.mediafire.com/file/lukerdbyufd6088/jre-8u251-windows-i586.exe/file",
     "link_name": "MediaFire",
-    "svg": "SiJava",
-    "tags": ["Public", ".exe"],
     "uploader": "Grilo",
     "needUser": false
   },
@@ -27,8 +23,6 @@
     "info": "L396, L375, L355, L110, L210, L350, L300, L130, L220, L310, L360, L365, L3150, L380, L383, L385, L485",
     "link": "https://www.mediafire.com/file/07ptw7xpp6325b3/Resets_EPSON_infohouse_%25C3%25A9_a_senha.rar/file",
     "link_name": "MediaFire",
-    "svg": "SiEpson",
-    "tags": ["InfoHouse", ".rar"],
     "uploader": "Grilo",
     "needUser": true
   },
@@ -38,8 +32,6 @@
     "info": " Ativadores do Windows e do Pacote Office (com reativação)",
     "link": "https://www.mediafire.com/file/5m6c6ijxho6nx3s/KMS_Suite_v8.6_EN.zip/file",
     "link_name": "MediaFire",
-    "svg": "SiWindows",
-    "tags": ["InfoHouse", ".zip"],
     "uploader": "Grilo",
     "needUser": true
   }

@@ -16,9 +16,16 @@ import {
 
 import Fuse from "fuse.js";
 
+import useSwr from "swr";
 import dls from "./dl.json";
+import LoadingPage from "../components/Views/LoadingPageFull";
 
 export default function Downloads() {
+  const fetcher = (url) => fetch(url).then((res) => res.json());
+  const { data, error, isValidating } = useSwr("/api/downloads", fetcher);
+
+  //console.log(error);
+
   const { user, isLoading } = useUser();
   const [query, updateQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -42,13 +49,16 @@ export default function Downloads() {
   function onSearch({ currentTarget }) {
     updateQuery(currentTarget.value);
   }
+
+  if (error) return "Error";
+  if (isValidating) return LoadingPage;
+
   return (
     <Layout title="Downloads">
       {/**
        * Begin of global modal
        * */}
       <>
-        {" "}
         {user && (
           <Transition appear show={isOpen} as={Fragment}>
             <Dialog
@@ -314,7 +324,7 @@ export default function Downloads() {
                         <div className="flex items-center text-sm">
                           <div>
                             <p className="font-semibold text-black dark:text-gray-50">
-                              MediaFire
+                              MediaFire - Grilo :)
                             </p>
                             <p className="text-xs text-gray-600 dark:text-gray-300">
                               Pasta com todos os arquivos
@@ -332,7 +342,6 @@ export default function Downloads() {
                                 className="inline-flex text-green-700 dark:text-green-400 hover:underline"
                                 rel="noreferrer"
                               >
-                                <HiExternalLink className="w-6 h-6 mr-1" />
                                 <span>MediaFire</span>
                               </a>
                             </p>
@@ -384,7 +393,6 @@ export default function Downloads() {
                                   className="inline-flex text-green-700 dark:text-green-400 hover:underline"
                                   rel="noreferrer"
                                 >
-                                  <HiExternalLink className="w-6 h-6 mr-1" />
                                   <span>{link_name}</span>
                                 </a>
                               </p>
@@ -426,7 +434,6 @@ export default function Downloads() {
                                       className="inline-flex text-green-700 dark:text-green-400 hover:underline"
                                       rel="noreferrer"
                                     >
-                                      <HiExternalLink className="w-6 h-6 mr-1" />
                                       <span>{link_name}</span>
                                     </a>
                                   </p>

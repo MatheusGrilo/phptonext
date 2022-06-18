@@ -46,16 +46,18 @@ export function User() {
             >
               <Menu.Items className="origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <Menu.Item>
-                  <MyLink
-                    href="/profile"
+                  <a
+                    href="https://dev-s01ji-oi.us.webtask.run/auth0-delegated-admin/"
+                    target="_blank"
+                    rel="noreferrer"
                     className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 capitalize flex"
                   >
                     <HiOutlineUser
                       className="w-5 h-5 mr-2"
                       aria-hidden="true"
                     />
-                    {user.nickname}
-                  </MyLink>
+                    Usuários
+                  </a>
                 </Menu.Item>
                 <Menu.Item>
                   <MyLink
